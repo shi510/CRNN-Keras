@@ -1,0 +1,11 @@
+!DB/train/A18sk6897.jpg
+!DB/train/B16dj0824.jpg
+!DB/train/F06aj4915.jpg
+!DB/train/G11qk8249.jpg
+!DB/test/H99dn8954.jpg
+!DB/test/L37ak0112.jpg
+!DB/test/N86dh0507.jpg
+!DB/test/O61sn2386.jpg
+!DB/test/P57dk3309.jpg
+DB/train/*
+DB/test/*
