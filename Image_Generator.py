@@ -52,8 +52,9 @@ class TextImageGenerator:
 
     def next_sample(self):
         self.event.wait()
+        buf = self.batch_buf
         Thread(target=self.__prepare_next_sample).start()
-        return self.batch_buf
+        return buf
 
     def next_batch(self):       ## batch size만큼 가져오기
         while True:
