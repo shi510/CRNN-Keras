@@ -1,6 +1,8 @@
 import cv2
 import os, random
 import numpy as np
+import threading
+from threading import Thread
 from parameter import letters
 
 # # Input data generator
@@ -24,8 +26,12 @@ class TextImageGenerator:
         self.n = len(self.img_dir)                      # number of images
         self.cur_index = 0
         self.last_load_idx = 0
+        self.event = threading.Event()
+        self.batch_buf = ([], [])
+        Thread(target=self.__prepare_next_sample).start()
 
-    def next_sample(self):
+    def __prepare_next_sample(self):
+        self.event.clear()
         batch_img = []
         batch_label = []
         for n in range(self.batch_size):
@@ -41,7 +47,13 @@ class TextImageGenerator:
             batch_img.append(img)
             batch_label.append(self.img_dir[idx][0:-4])
         self.last_load_idx += self.batch_size
-        return batch_img, batch_label
+        self.batch_buf = (batch_img, batch_label)
+        self.event.set()
+
+    def next_sample(self):
+        self.event.wait()
+        Thread(target=self.__prepare_next_sample).start()
+        return self.batch_buf
 
     def next_batch(self):       ## batch size만큼 가져오기
         while True:
